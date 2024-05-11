@@ -69,7 +69,6 @@ To set up the Django Vendor Performance API on your local machine, follow these 
 - `DELETE /api/vendors/<int:pk>/`: Delete a vendor.
 - `GET /api/vendors/{vendor_id}/performance/`: Retrieve historical performance metrics for a specific vendor.
 
-For more detailed documentation on API endpoints and their usage, refer to the [API documentation](#api-documentation).
 
 
 ## Testing
