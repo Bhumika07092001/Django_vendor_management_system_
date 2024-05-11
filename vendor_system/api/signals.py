@@ -68,13 +68,23 @@ def calculate_fulfillment_rate(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Vendor)
 def update_historical_performance(sender, instance, created, **kwargs):
     if not created:
-        current_datetime = timezone.now()
-        HistoricalPerformance.objects.create(
-            vendor=instance,
-            date=current_datetime,
-            on_time_delivery_rate=instance.on_time_delivery_rate,
-            quality_rating_avg=instance.quality_rating_avg,
-            average_response_time=instance.average_response_time,
-            fulfillment_rate=instance.fulfillment_rate)
+        if HistoricalPerformance.objects.filter(vendor=instance).exists():
+            historical_performance = HistoricalPerformance.objects.get(vendor=instance)
+            historical_performance.date = timezone.now()
+            historical_performance.on_time_delivery_rate = instance.on_time_delivery_rate
+            historical_performance.quality_rating_avg = instance.quality_rating_avg
+            historical_performance.average_response_time = instance.response_time_rate
+            historical_performance.fulfillment_rate = instance.fulfillment_rate
+            historical_performance.save()
+        else:
+            HistoricalPerformance.objects.create(
+                vendor=instance,
+                date=timezone.now(),
+                on_time_delivery_rate=instance.on_time_delivery_rate,
+                quality_rating_avg=instance.quality_rating_avg,
+                average_response_time=instance.response_time_rate,
+                fulfillment_rate=instance.fulfillment_rate
+            )
+
         
 
