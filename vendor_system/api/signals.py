@@ -35,24 +35,24 @@ def calculate_quality_rating_average(sender, instance, created, **kwargs):
             instance.vendor.quality_rating_avg = average_quality_rating
             instance.vendor.save()
 
-@receiver(post_save, sender=PurchaseOrder)
-def calculate_average_response_time(sender, instance, created, **kwargs):
-    if instance.acknowledgment_date:
-        acknowledged_orders = PurchaseOrder.objects.filter(
-            vendor=instance.vendor,
-            acknowledgment_date__isnull=False 
-        )
+# @receiver(post_save, sender=PurchaseOrder)
+# def calculate_average_response_time(sender, instance, created, **kwargs):
+#     if instance.acknowledgment_date:
+#         acknowledged_orders = PurchaseOrder.objects.filter(
+#             vendor=instance.vendor,
+#             acknowledgment_date__isnull=False 
+#         )
         
-        total_response_time = sum(
-            (order.acknowledgment_date - order.issue_date).total_seconds() 
-            for order in acknowledged_orders
-        )
+#         total_response_time = sum(
+#             (order.acknowledgment_date - order.issue_date).total_seconds() 
+#             for order in acknowledged_orders
+#         )
         
-        total_acknowledged_orders = acknowledged_orders.count()
-        if total_acknowledged_orders > 0:
-            average_response_time = total_response_time / total_acknowledged_orders
-            instance.vendor.response_time_rate = average_response_time
-            instance.vendor.save()
+#         total_acknowledged_orders = acknowledged_orders.count()
+#         if total_acknowledged_orders > 0:
+#             average_response_time = total_response_time / total_acknowledged_orders
+#             instance.vendor.response_time_rate = average_response_time
+#             instance.vendor.save()
 
 
 @receiver(post_save, sender=PurchaseOrder)
